@@ -13,8 +13,8 @@ public class SimpleList<T> implements List<T>{
 
     @Override
     public int size() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'size'");
+        System.out.println("testeo");
+        return 1;
     }
 
     @Override
