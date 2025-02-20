@@ -12,9 +12,14 @@ public class SimpleList<T> implements List<T>{
     }
 
     @Override
-    public int size() {
-        System.out.println("testeo");
-        return 1;
+   public int size() {
+        Node<T> aux = head;
+        int count = 0;
+        while (aux != null) {
+            count++;
+            aux = aux.getNext();
+        }
+        return count;
     }
 
     @Override
@@ -25,8 +30,14 @@ public class SimpleList<T> implements List<T>{
 
     @Override
     public boolean contains(Object o) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'contains'");
+         Node<T> aux = head;
+        while (aux != null) {
+            if (aux.getData().equals(o)) {
+                return true;
+            }
+            aux = aux.getNext();
+        }
+        return false;
     }
 
     @Override
@@ -37,8 +48,13 @@ public class SimpleList<T> implements List<T>{
 
     @Override
     public Object[] toArray() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'toArray'");
+      Object[] array = new Object[size()];
+        Node<T> aux = head;
+        for (int i = 0; i < size(); i++) {
+            array[i] = aux.getData();
+            aux = aux.getNext();
+        }
+        return array;
     }
 
     @Override
@@ -67,8 +83,7 @@ public class SimpleList<T> implements List<T>{
 
     @Override
     public boolean addAll(Collection c) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addAll'");
+       
     }
 
     @Override
