@@ -82,8 +82,15 @@ public class SimpleList<T> implements List<T>{
     }
 
     @Override
-    public boolean addAll(Collection c) {
-       
+    public boolean addAll(Collection<? extends T> c) {
+        
+        boolean add = false;
+        for (T t : c) {
+            if (add(t)) {
+                add = true;
+            }
+        }
+        return add;
     }
 
     @Override
@@ -112,8 +119,16 @@ public class SimpleList<T> implements List<T>{
 
     @Override
     public T get(int index) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'get'");
+        Node<T> aux = head;
+        T data = null;
+        for (int i = 0; i < size(); i++) {
+            if (i == index) {
+                data = aux.getData();
+            } else {
+                aux = aux.getNext();
+            }
+        }
+        return data;
     }
 
     @Override
