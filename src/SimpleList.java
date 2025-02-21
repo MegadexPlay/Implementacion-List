@@ -109,8 +109,22 @@ public class SimpleList<T> implements List<T> {
 
     @Override
     public boolean remove(Object o) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'remove'");
+         if (head == null) return false; 
+        
+            if (head.getData().equals(o)) { 
+                head = head.getNext();
+                return true;
+            }
+        
+            Node<T> aux = head;
+            while (aux.getNext() != null) {
+                if (aux.getNext().getData().equals(o)) {
+                    aux.setNext(aux.getNext().getNext()); 
+                    return true;
+                }
+                aux = aux.getNext();
+            }
+            return false; 
     }
 
     @Override
@@ -286,8 +300,17 @@ public class SimpleList<T> implements List<T> {
 
     @Override
     public int lastIndexOf(Object o) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'lastIndexOf'");
+         int index = -1, currentIndex = 0;
+        Node<T> aux = head;
+    
+        while (aux != null) {
+            if (aux.getData().equals(o)) {
+                index = currentIndex; 
+            }
+            aux = aux.getNext();
+            currentIndex++;
+        }
+        return index;
     }
 
     @Override
