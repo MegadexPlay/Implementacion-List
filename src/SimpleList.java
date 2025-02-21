@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -24,8 +25,7 @@ public class SimpleList<T> implements List<T>{
 
     @Override
     public boolean isEmpty() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isEmpty'");
+        return head != null;
     }
 
     @Override
@@ -42,8 +42,21 @@ public class SimpleList<T> implements List<T>{
 
     @Override
     public Iterator iterator() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'iterator'");
+        Iterator<T> iterator = new Iterator<T>() {
+            Node<T> auxNode = head;
+            @Override
+            public boolean hasNext() {
+                return auxNode != null;
+            }
+            @Override
+            public T next() {
+                T data = auxNode.getData();
+                auxNode = auxNode.getNext();
+                return data;
+            }
+        };
+
+        return iterator;
     }
 
     @Override
@@ -58,9 +71,23 @@ public class SimpleList<T> implements List<T>{
     }
 
     @Override
-    public Object[] toArray(Object[] a) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'toArray'");
+    public <T> T[] toArray(T[] a) {
+        if (a.length >= this.size()) {
+            Node<T> auxNode = (Node<T>) head;
+            for (int j = 0; j < this.size(); j++) {
+                a[j] = (auxNode.getData());
+                auxNode = auxNode.getNext();
+            }
+            return a;
+        } else {
+            T[] tempArray = null;
+            Node<T> auxNode = (Node<T>) head;
+            for (int j = 0; j < a.length; j++) {
+                tempArray[j] = (auxNode.getData());
+                auxNode = auxNode.getNext();
+            }
+            return tempArray;
+        }
     }
 
     @Override
@@ -77,8 +104,14 @@ public class SimpleList<T> implements List<T>{
 
     @Override
     public boolean containsAll(Collection c) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'containsAll'");
+       boolean objectFound = true;
+        while (objectFound != false) {
+            Iterator colectionIterator = c.iterator();
+            while (colectionIterator.hasNext()) {
+                objectFound = this.contains(colectionIterator.next());
+            }
+        }
+        return objectFound;
     }
 
     @Override
@@ -101,8 +134,16 @@ public class SimpleList<T> implements List<T>{
 
     @Override
     public boolean removeAll(Collection c) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeAll'");
+        boolean modified = false;
+        Iterator colectionIterator = c.iterator();
+        while (colectionIterator.hasNext()) {
+            Object auxObject = colectionIterator.next();
+            if (this.contains(auxObject)) {
+                this.remove(auxObject);
+                modified = true;
+            }
+        }
+        return modified;
     }
 
     @Override
@@ -132,9 +173,17 @@ public class SimpleList<T> implements List<T>{
     }
 
     @Override
-    public Object set(int index, Object element) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'set'");
+    public T set(int index, T element) {
+         T originalObject = null;
+        for (int i = 0; i <= index; i++) {
+            Node<T> aux = head;
+            if (i == index) {
+                originalObject = aux.getData();
+                aux.setData(element);
+            }
+            aux = aux.getNext();
+        }
+        return originalObject;
     }
 
     @Override
@@ -175,8 +224,15 @@ public class SimpleList<T> implements List<T>{
 
     @Override
     public List subList(int fromIndex, int toIndex) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'subList'");
+        List<T> finalList = new ArrayList<>();
+        for (int i = 0; i <= toIndex; i++) {
+            Node<T> aux = head;
+            if (i >= fromIndex) {
+                finalList.add(aux.getData());
+            }
+            aux = aux.getNext();
+        }
+        return finalList;
     }
     
 }
