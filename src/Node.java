@@ -23,9 +23,9 @@ public class Node<T> {
         Next = next;
     }
 
-    @Override
-    public String toString() {
-        return "Node [data=" + data + ", Next=" + Next + "]";
+   
+    public void setData(T data) {
+        this.data = data;
     }
 
     
