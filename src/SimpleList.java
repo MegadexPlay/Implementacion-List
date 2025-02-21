@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class SimpleList<T> implements List<T>{
+public class SimpleList<T> implements List<T> {
 
     private Node<T> head;
 
@@ -13,7 +13,7 @@ public class SimpleList<T> implements List<T>{
     }
 
     @Override
-   public int size() {
+    public int size() {
         Node<T> aux = head;
         int count = 0;
         while (aux != null) {
@@ -30,7 +30,7 @@ public class SimpleList<T> implements List<T>{
 
     @Override
     public boolean contains(Object o) {
-         Node<T> aux = head;
+        Node<T> aux = head;
         while (aux != null) {
             if (aux.getData().equals(o)) {
                 return true;
@@ -44,10 +44,12 @@ public class SimpleList<T> implements List<T>{
     public Iterator iterator() {
         Iterator<T> iterator = new Iterator<T>() {
             Node<T> auxNode = head;
+
             @Override
             public boolean hasNext() {
                 return auxNode != null;
             }
+
             @Override
             public T next() {
                 T data = auxNode.getData();
@@ -61,7 +63,7 @@ public class SimpleList<T> implements List<T>{
 
     @Override
     public Object[] toArray() {
-      Object[] array = new Object[size()];
+        Object[] array = new Object[size()];
         Node<T> aux = head;
         for (int i = 0; i < size(); i++) {
             array[i] = aux.getData();
@@ -92,8 +94,17 @@ public class SimpleList<T> implements List<T>{
 
     @Override
     public boolean add(Object e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'add'");
+        Node<T> newNode = new Node<>((T) e);
+        if (head == null) {
+            head = newNode;
+        } else {
+            Node<T> temp = head;
+            while (temp.getNext() != null) {
+                temp = temp.getNext();
+            }
+            temp.setNext(newNode);
+        }
+        return true;
     }
 
     @Override
@@ -104,7 +115,7 @@ public class SimpleList<T> implements List<T>{
 
     @Override
     public boolean containsAll(Collection c) {
-       boolean objectFound = true;
+        boolean objectFound = true;
         while (objectFound != false) {
             Iterator colectionIterator = c.iterator();
             while (colectionIterator.hasNext()) {
@@ -116,7 +127,7 @@ public class SimpleList<T> implements List<T>{
 
     @Override
     public boolean addAll(Collection<? extends T> c) {
-        
+
         boolean add = false;
         for (T t : c) {
             if (add(t)) {
@@ -127,9 +138,30 @@ public class SimpleList<T> implements List<T>{
     }
 
     @Override
-    public boolean addAll(int index, Collection c) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addAll'");
+    public boolean addAll(int index, Collection<? extends T> c) {
+        boolean result = false;
+        if (c.isEmpty() == true || index > size() || index < 0) {
+            result = false;
+        }
+        if (index == 0) {
+            addAll(c);
+            result = true;
+        } else if (index > 0) {
+            Node<T> temp = head;
+            Node<T> nextTemp = null;
+            for (int i = 0; i < index - 1; i++) {
+                temp = temp.getNext();
+            }
+            nextTemp = temp.getNext();
+            for (T element : c) {
+                Node<T> aux = new Node<T>(element);
+                temp.setNext(aux);
+                temp = temp.getNext();
+            }
+            temp.setNext(nextTemp);
+            result = true;
+        }
+        return result;
     }
 
     @Override
@@ -148,14 +180,31 @@ public class SimpleList<T> implements List<T>{
 
     @Override
     public boolean retainAll(Collection c) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'retainAll'");
+        boolean modified = false;
+        while (head != null && !c.contains(head.getData())) {
+            head = head.getNext();
+            modified = true;
+        }
+
+        if (head == null)
+            return modified;
+
+        Node<T> current = head;
+        while (current.getNext() != null) {
+            if (!c.contains(current.getNext().getData())) {
+                current.setNext(current.getNext().getNext());
+                modified = true;
+            } else {
+                current = current.getNext();
+            }
+        }
+
+        return modified;
     }
 
     @Override
     public void clear() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'clear'");
+        head = null;
     }
 
     @Override
@@ -174,7 +223,7 @@ public class SimpleList<T> implements List<T>{
 
     @Override
     public T set(int index, T element) {
-         T originalObject = null;
+        T originalObject = null;
         for (int i = 0; i <= index; i++) {
             Node<T> aux = head;
             if (i == index) {
@@ -188,20 +237,51 @@ public class SimpleList<T> implements List<T>{
 
     @Override
     public void add(int index, Object element) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'add'");
+        Node<T> newNode = new Node<>((T) element);
+        if (index == 0) {
+            newNode.setNext(head);
+            head = newNode;
+            return;
+        }
+        Node<T> aux = head;
+        for (int i = 0; i < index - 1; i++) {
+            aux = aux.getNext();
+        }
+        newNode.setNext(aux.getNext());
+        aux.setNext(newNode);
     }
 
     @Override
     public T remove(int index) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'remove'");
+        Node<T> aux = head;
+        Node<T> nodeToSend = head;
+        if (index == 0) {
+            head = head.getNext();
+        } else {
+            for (int i = 0; i < index - 1; i++) {
+                aux = aux.getNext();
+            }
+            nodeToSend = aux.getNext();
+            aux.setNext(aux.getNext().getNext());
+
+        }
+        return nodeToSend.getData();
     }
 
     @Override
     public int indexOf(Object o) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'indexOf'");
+        int result = 0;
+        Node<T> aux = head;
+
+        while (aux != null) {
+            if (aux.getData().equals(o)) {
+                return result;
+            }
+            aux = aux.getNext();
+            result++;
+        }
+
+        return -1;
     }
 
     @Override
@@ -234,5 +314,5 @@ public class SimpleList<T> implements List<T>{
         }
         return finalList;
     }
-    
+
 }
